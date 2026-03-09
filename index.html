@@ -3,324 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Actividad 2025-2026</title>
+    <title>Registro de Actividad Mensual</title>
     <style>
         :root {
-            --azul-oscuro: #1a237e;
-            --azul-medio: #3949ab;
-            --azul-claro: #e8eaf6;
-            --whatsapp: #25d366;
-            --blanco: #ffffff;
-            --texto: #333333;
-            --input-bg: #ffffff;
-            --card-bg: #ffffff;
-            --borde: #d1d9e6;
-        }
-
-        [data-theme="dark"] {
-            --azul-oscuro: #8c9eff;
-            --azul-medio: #5c6bc0;
-            --azul-claro: #121212;
-            --blanco: #1e1e1e;
-            --texto: #e0e0e0;
-            --input-bg: #2d2d2d;
-            --card-bg: #1e1e1e;
-            --borde: #444444;
+            --primary-color: #2c3e50;
+            --accent-color: #25D366; /* WhatsApp Green */
+            --bg-body: #f4f7f6;
+            --text-main: #333;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--azul-claro);
-            color: var(--texto);
-            display: flex;
-            justify-content: center;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
             margin: 0;
-            transition: background-color 0.3s ease;
-            -webkit-tap-highlight-color: transparent;
+            padding: 15px;
         }
 
-        .card {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 650px;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            border-top: 8px solid var(--azul-oscuro);
-            position: relative;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .header-flex {
+        .header-section {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            position: relative;
+            border-bottom: 2px solid var(--bg-body);
+            padding-bottom: 10px;
         }
 
-        h1 {
-            color: var(--azul-oscuro);
-            font-size: 1rem;
-            margin: 0;
-            text-transform: uppercase;
-            text-align: center;
+        /* Ajuste crucial para iOS: Evita zoom en inputs */
+        input, select {
+            font-size: 16px !important;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
         }
 
-        .theme-switch {
-            position: absolute;
-            right: -10px;
-            top: -10px;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--azul-medio);
-            color: white;
-            font-size: 1.2rem;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            z-index: 10;
-        }
-
-        #nombrePersona {
-            background: transparent;
-            border: none;
-            border-bottom: 2px dashed var(--azul-medio);
-            text-align: center;
-            font-size: 1.1rem;
-            color: var(--azul-oscuro);
-            font-weight: bold;
-            width: 85%;
-            padding: 10px;
-            outline: none;
-            display: block;
-            margin: 0 auto 25px;
-        }
-
-        .form-group { margin-bottom: 15px; }
-
-        label.titulo-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: var(--azul-medio);
-        }
-
-        input[type="text"], input[type="number"], select, textarea {
+        table {
             width: 100%;
-            padding: 12px;
-            border: 2px solid var(--borde);
-            border-radius: 8px;
-            background-color: var(--input-bg);
-            color: var(--texto);
-            box-sizing: border-box;
-            font-size: 16px;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
-        /* ESTILOS PARA CHECKBOX CORREGIDOS */
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(128, 128, 128, 0.1);
-            padding: 14px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            user-select: none;
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            font-size: 0.9em;
         }
 
-        .checkbox-group input[type="checkbox"] { 
-            width: 24px; 
-            height: 24px; 
-            margin: 0; 
-            flex-shrink: 0;
-            cursor: pointer;
-            accent-color: var(--azul-medio); /* Color de la tilde */
-            -webkit-appearance: checkbox; /* Fuerza apariencia en iOS */
-            appearance: checkbox;
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
         }
 
-        #campoHoras { display: none; margin-top: 10px; padding-left: 15px; border-left: 4px solid var(--azul-medio); }
+        .input-num {
+            width: 50px;
+            text-align: center;
+        }
 
-        .botones-container { display: flex; gap: 10px; margin-top: 15px; }
+        .fila-totales {
+            background-color: #e8f4fd;
+            font-weight: bold;
+        }
 
-        button.main-btn {
-            flex: 1;
-            padding: 15px;
+        .btn-whatsapp {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: white;
             border: none;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 17px;
             font-weight: bold;
             cursor: pointer;
-            color: white;
-            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
-        .btn-guardar { background-color: var(--azul-oscuro); }
-        .btn-whatsapp { background-color: var(--whatsapp); }
-
-        .tabla-container { margin-top: 25px; overflow-x: auto; border-radius: 8px; }
-
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-
-        th { background: var(--azul-medio); color: white; padding: 12px 5px; }
-
-        td { padding: 12px 5px; border-bottom: 1px solid var(--borde); text-align: center; }
-
-        .total-row { background: rgba(57, 73, 171, 0.2); font-weight: bold; color: var(--azul-oscuro); }
-
-        .nota-celda { font-style: italic; opacity: 0.7; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .btn-whatsapp:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div class="header-flex">
-        <h1>Mi Actividad 2025-2026</h1>
-        <button class="theme-switch" id="themeBtn" type="button">🌙</button>
+<div class="container">
+    <div class="header-section">
+        <label for="mes-registro"><b>Mes:</b></label>
+        <select id="mes-registro">
+            <option value="Septiembre 2025">Septiembre 2025</option>
+            <option value="Octubre 2025">Octubre 2025</option>
+            <option value="Noviembre 2025">Noviembre 2025</option>
+            <option value="Diciembre 2025">Diciembre 2025</option>
+            <option value="Enero 2026">Enero 2026</option>
+            <option value="Febrero 2026">Febrero 2026</option>
+            <option value="Marzo 2026">Marzo 2026</option>
+            <option value="Abril 2026">Abril 2026</option>
+        </select>
     </div>
 
-    <input type="text" id="nombrePersona" placeholder="Tu nombre">
-    
-    <form id="registroForm">
-        <div class="form-group">
-            <label class="titulo-label">Mes</label>
-            <select id="mes" required>
-                <option value="Septiembre 25">Septiembre 2025</option>
-                <option value="Octubre 25">Octubre 2025</option>
-                <option value="Noviembre 25">Noviembre 2025</option>
-                <option value="Diciembre 25">Diciembre 2025</option>
-                <option value="Enero 26">Enero 2026</option>
-                <option value="Febrero 26">Febrero 2026</option>
-                <option value="Marzo 26">Marzo 2026</option>
-                <option value="Abril 26">Abril 2026</option>
-                <option value="Mayo 26">Mayo 2026</option>
-                <option value="Junio 26">Junio 2026</option>
-                <option value="Julio 26">Julio 2026</option>
-                <option value="Agosto 26">Agosto 2026</option>
-            </select>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Semana/Día</th>
+                <th>Horas</th>
+                <th>Cursos</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpo-tabla">
+            <tr class="fila-datos">
+                <td>Actividad</td>
+                <td><input type="number" class="input-horas" value="0" oninput="calcularTodo()"></td>
+                <td><input type="number" class="input-cursos" value="0" oninput="calcularTodo()"></td>
+            </tr>
+            </tbody>
+        <tfoot>
+            <tr class="fila-totales">
+                <td>TOTALES</td>
+                <td id="total-horas">0</td>
+                <td id="promedio-cursos">0.0</td>
+            </tr>
+        </tfoot>
+    </table>
 
-        <div class="form-group">
-            <label class="checkbox-group" for="participo">
-                <input type="checkbox" id="participo" checked>
-                <span>¿Participé en la predicación?</span>
-            </label>
-            
-            <label class="checkbox-group" for="precursor">
-                <input type="checkbox" id="precursor">
-                <span>¿Serví como precursor?</span>
-            </label>
-            
-            <div id="campoHoras">
-                <label class="titulo-label">Horas realizadas</label>
-                <input type="number" id="horas" min="0" value="0" pattern="[0-9]*">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="titulo-label">Cursos de la Biblia</label>
-            <input type="number" id="cursos" min="0" value="0" pattern="[0-9]*">
-        </div>
-
-        <div class="form-group">
-            <label class="titulo-label">Notas</label>
-            <textarea id="notas" rows="2" placeholder="Notas..."></textarea>
-        </div>
-
-        <div class="botones-container">
-            <button type="button" id="btnGuardar" class="main-btn btn-guardar">Guardar</button>
-            <button type="button" id="btnCompartir" class="main-btn btn-whatsapp">Compartir</button>
-        </div>
-    </form>
-
-    <div class="tabla-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Mes</th>
-                    <th>Part.</th>
-                    <th>Prec.</th>
-                    <th>Hrs</th>
-                    <th>Cur.</th>
-                    <th>Notas</th>
-                </tr>
-            </thead>
-            <tbody id="cuerpoTabla"></tbody>
-            <tfoot id="pieTabla"></tfoot>
-        </table>
-    </div>
-    <button id="btnLimpiar" style="background:none; border:none; color:#999; font-size:0.75rem; width:100%; margin-top:25px; cursor:pointer; text-decoration: underline;">Borrar historial completo</button>
+    <button class="btn-whatsapp" onclick="compartirWhatsApp()">
+        Compartir por WhatsApp
+    </button>
 </div>
 
 <script>
-    const getEl = (id) => document.getElementById(id);
-    
-    // Control de horas
-    const toggleH = () => getEl('campoHoras').style.display = getEl('precursor').checked ? 'block' : 'none';
-    getEl('precursor').addEventListener('change', toggleH);
+    // 1. Auto-selección de mes al cargar
+    document.addEventListener('DOMContentLoaded', () => {
+        const fecha = new Date();
+        const formato = { month: 'long', year: 'numeric' };
+        let mesActual = fecha.toLocaleDateString('es-ES', formato);
+        mesActual = mesActual.charAt(0).toUpperCase() + mesActual.slice(1);
 
-    // Tema
-    getEl('themeBtn').addEventListener('click', () => {
-        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('tema_v2', next);
-        getEl('themeBtn').innerText = next === 'dark' ? '☀️' : '🌙';
+        const sel = document.getElementById('mes-registro');
+        for (let i = 0; i < sel.options.length; i++) {
+            if (sel.options[i].value === mesActual) {
+                sel.selectedIndex = i;
+                break;
+            }
+        }
+        calcularTodo();
     });
 
-    if(localStorage.getItem('tema_v2') === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        getEl('themeBtn').innerText = '☀️';
+    // 2. Cálculo de Horas y Promedio de Cursos
+    function calcularTodo() {
+        let horasTotales = 0;
+        let sumaCursos = 0;
+        let conteoMeses = 0;
+
+        document.querySelectorAll('.fila-datos').forEach(fila => {
+            const h = parseFloat(fila.querySelector('.input-horas').value) || 0;
+            const c = parseFloat(fila.querySelector('.input-cursos').value) || 0;
+
+            horasTotales += h;
+            if (c > 0) {
+                sumaCursos += c;
+                conteoMeses++;
+            }
+        });
+
+        const promedio = conteoMeses > 0 ? (sumaCursos / conteoMeses).toFixed(1) : "0.0";
+
+        document.getElementById('total-horas').innerText = horasTotales;
+        document.getElementById('promedio-cursos').innerText = promedio;
     }
 
-    // Datos
-    const cargar = () => {
-        getEl('nombrePersona').value = localStorage.getItem('nombre_v2') || '';
-        const h = JSON.parse(localStorage.getItem('hist_v2')) || [];
-        const cuerpo = getEl('cuerpoTabla');
-        let sH = 0, sC = 0;
-        cuerpo.innerHTML = '';
-        h.forEach(i => {
-            sH += i.horas; sC += i.cursos;
-            cuerpo.innerHTML += `<tr><td style="font-weight:600">${i.mes}</td><td>${i.participo}</td><td>${i.precursor}</td><td>${i.horas || '-'}</td><td>${i.cursos}</td><td class="nota-celda">${i.notas}</td></tr>`;
-        });
-        getEl('pieTabla').innerHTML = h.length > 0 ? `<tr class="total-row"><td colspan="3">TOTALES</td><td>${sH}</td><td>${sC}</td><td></td></tr>` : '';
-    };
+    // 3. Compartir con compatibilidad Android/iOS
+    function compartirWhatsApp() {
+        const mes = document.getElementById('mes-registro').value;
+        const horas = document.getElementById('total-horas').innerText;
+        const promedio = document.getElementById('promedio-cursos').innerText;
 
-    getEl('nombrePersona').addEventListener('input', (e) => localStorage.setItem('nombre_v2', e.target.value));
+        const texto = `*Registro de Actividad*\n` +
+                      `📅 *Mes:* ${mes}\n` +
+                      `⏱️ *Horas:* ${horas}\n` +
+                      `📚 *Promedio Cursos:* ${promedio}\n\n` +
+                      `_Enviado desde mi Registro Web_`;
 
-    getEl('btnGuardar').addEventListener('click', () => {
-        const reg = {
-            mes: getEl('mes').value,
-            participo: getEl('participo').checked ? 'Sí' : 'No',
-            precursor: getEl('precursor').checked ? 'Sí' : 'No',
-            horas: getEl('precursor').checked ? (parseInt(getEl('horas').value) || 0) : 0,
-            cursos: parseInt(getEl('cursos').value) || 0,
-            notas: getEl('notas').value
-        };
-        let hist = JSON.parse(localStorage.getItem('hist_v2')) || [];
-        const idx = hist.findIndex(i => i.mes === reg.mes);
-        if (idx > -1) hist[idx] = reg; else hist.push(reg);
-        localStorage.setItem('hist_v2', JSON.stringify(hist));
-        alert("Guardado correctamente");
-        cargar();
-    });
-
-    getEl('btnCompartir').addEventListener('click', () => {
-        const h = JSON.parse(localStorage.getItem('hist_v2')) || [];
-        if(!h.length) return alert("Sin datos");
-        const u = h[h.length-1];
-        const txt = `*Actividad*\n*Nombre:* ${getEl('nombrePersona').value || 'Publicador'}\n*Mes:* ${u.mes}\n• Participó: ${u.participo}\n• Precursor: ${u.precursor}\n• Horas: ${u.horas}\n• Cursos: ${u.cursos}\n• Notas: ${u.notas}`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank');
-    });
-
-    getEl('btnLimpiar').addEventListener('click', () => { if(confirm('¿Borrar todo?')) { localStorage.removeItem('hist_v2'); cargar(); } });
-
-    window.onload = cargar;
+        const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+        window.open(url, '_blank');
+    }
 </script>
+
 </body>
 </html>
