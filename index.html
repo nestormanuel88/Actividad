@@ -61,7 +61,7 @@
 
         h1 {
             color: var(--azul-oscuro);
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin: 0;
             text-transform: uppercase;
             text-align: center;
@@ -99,19 +99,18 @@
             outline: none;
             display: block;
             margin: 0 auto 25px;
-            -webkit-appearance: none;
         }
 
         .form-group { margin-bottom: 15px; }
 
-        label {
+        label.titulo-label {
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
             color: var(--azul-medio);
         }
 
-        input, select, textarea {
+        input[type="text"], input[type="number"], select, textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid var(--borde);
@@ -119,10 +118,10 @@
             background-color: var(--input-bg);
             color: var(--texto);
             box-sizing: border-box;
-            font-size: 16px; /* Evita zoom automático en iPhone */
-            -webkit-appearance: none;
+            font-size: 16px;
         }
 
+        /* ESTILOS PARA CHECKBOX CORREGIDOS */
         .checkbox-group {
             display: flex;
             align-items: center;
@@ -132,13 +131,18 @@
             border-radius: 10px;
             margin-bottom: 10px;
             cursor: pointer;
+            user-select: none;
         }
 
-        .checkbox-group input { 
+        .checkbox-group input[type="checkbox"] { 
             width: 24px; 
             height: 24px; 
             margin: 0; 
             flex-shrink: 0;
+            cursor: pointer;
+            accent-color: var(--azul-medio); /* Color de la tilde */
+            -webkit-appearance: checkbox; /* Fuerza apariencia en iOS */
+            appearance: checkbox;
         }
 
         #campoHoras { display: none; margin-top: 10px; padding-left: 15px; border-left: 4px solid var(--azul-medio); }
@@ -154,7 +158,6 @@
             cursor: pointer;
             color: white;
             font-size: 0.9rem;
-            -webkit-appearance: none;
         }
 
         .btn-guardar { background-color: var(--azul-oscuro); }
@@ -181,11 +184,11 @@
         <button class="theme-switch" id="themeBtn" type="button">🌙</button>
     </div>
 
-    <input type="text" id="nombrePersona" placeholder="Escribe tu nombre aquí">
+    <input type="text" id="nombrePersona" placeholder="Tu nombre">
     
     <form id="registroForm">
         <div class="form-group">
-            <label>Mes</label>
+            <label class="titulo-label">Mes</label>
             <select id="mes" required>
                 <option value="Septiembre 25">Septiembre 2025</option>
                 <option value="Octubre 25">Octubre 2025</option>
@@ -205,27 +208,27 @@
         <div class="form-group">
             <label class="checkbox-group" for="participo">
                 <input type="checkbox" id="participo" checked>
-                ¿Participé en la predicación?
+                <span>¿Participé en la predicación?</span>
             </label>
             
             <label class="checkbox-group" for="precursor">
                 <input type="checkbox" id="precursor">
-                ¿Serví como precursor?
+                <span>¿Serví como precursor?</span>
             </label>
             
             <div id="campoHoras">
-                <label>Horas realizadas</label>
+                <label class="titulo-label">Horas realizadas</label>
                 <input type="number" id="horas" min="0" value="0" pattern="[0-9]*">
             </div>
         </div>
 
         <div class="form-group">
-            <label>Cursos de la Biblia</label>
+            <label class="titulo-label">Cursos de la Biblia</label>
             <input type="number" id="cursos" min="0" value="0" pattern="[0-9]*">
         </div>
 
         <div class="form-group">
-            <label>Notas</label>
+            <label class="titulo-label">Notas</label>
             <textarea id="notas" rows="2" placeholder="Notas..."></textarea>
         </div>
 
@@ -255,66 +258,43 @@
 </div>
 
 <script>
-    // --- COMPATIBILIDAD IOS/IPHONE ---
     const getEl = (id) => document.getElementById(id);
     
-    // Función para manejar el despliegue de horas (Corregido para iOS)
-    const handlePrecursorChange = () => {
-        getEl('campoHoras').style.display = getEl('precursor').checked ? 'block' : 'none';
-    };
+    // Control de horas
+    const toggleH = () => getEl('campoHoras').style.display = getEl('precursor').checked ? 'block' : 'none';
+    getEl('precursor').addEventListener('change', toggleH);
 
-    getEl('precursor').addEventListener('change', handlePrecursorChange);
-    getEl('precursor').addEventListener('click', handlePrecursorChange);
-
-    // Modo Oscuro persistente
+    // Tema
     getEl('themeBtn').addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
+        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('theme_act', next);
+        localStorage.setItem('tema_v2', next);
         getEl('themeBtn').innerText = next === 'dark' ? '☀️' : '🌙';
     });
 
-    if(localStorage.getItem('theme_act') === 'dark') {
+    if(localStorage.getItem('tema_v2') === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
         getEl('themeBtn').innerText = '☀️';
     }
 
-    // Nombre persistente
-    getEl('nombrePersona').addEventListener('input', () => {
-        localStorage.setItem('user_name_act', getEl('nombrePersona').value);
-    });
-
-    // --- LÓGICA DE DATOS ---
-    const cargarDatos = () => {
-        getEl('nombrePersona').value = localStorage.getItem('user_name_act') || '';
-        const historial = JSON.parse(localStorage.getItem('historial_act')) || [];
+    // Datos
+    const cargar = () => {
+        getEl('nombrePersona').value = localStorage.getItem('nombre_v2') || '';
+        const h = JSON.parse(localStorage.getItem('hist_v2')) || [];
         const cuerpo = getEl('cuerpoTabla');
-        const pie = getEl('pieTabla');
-        
+        let sH = 0, sC = 0;
         cuerpo.innerHTML = '';
-        let sumaH = 0, sumaC = 0;
-
-        historial.forEach(item => {
-            sumaH += (item.horas || 0);
-            sumaC += (item.cursos || 0);
-            cuerpo.innerHTML += `<tr>
-                <td style="font-weight:600">${item.mes}</td>
-                <td>${item.participo}</td>
-                <td>${item.precursor}</td>
-                <td>${item.horas > 0 ? item.horas : '-'}</td>
-                <td>${item.cursos}</td>
-                <td class="nota-celda">${item.notas || ''}</td>
-            </tr>`;
+        h.forEach(i => {
+            sH += i.horas; sC += i.cursos;
+            cuerpo.innerHTML += `<tr><td style="font-weight:600">${i.mes}</td><td>${i.participo}</td><td>${i.precursor}</td><td>${i.horas || '-'}</td><td>${i.cursos}</td><td class="nota-celda">${i.notas}</td></tr>`;
         });
-
-        pie.innerHTML = historial.length > 0 ? `
-            <tr class="total-row"><td colspan="3">TOTALES</td><td>${sumaH}</td><td>${sumaC}</td><td></td></tr>` : '';
+        getEl('pieTabla').innerHTML = h.length > 0 ? `<tr class="total-row"><td colspan="3">TOTALES</td><td>${sH}</td><td>${sC}</td><td></td></tr>` : '';
     };
 
-    getEl('btnGuardar').addEventListener('click', (e) => {
-        e.preventDefault();
-        const registro = {
+    getEl('nombrePersona').addEventListener('input', (e) => localStorage.setItem('nombre_v2', e.target.value));
+
+    getEl('btnGuardar').addEventListener('click', () => {
+        const reg = {
             mes: getEl('mes').value,
             participo: getEl('participo').checked ? 'Sí' : 'No',
             precursor: getEl('precursor').checked ? 'Sí' : 'No',
@@ -322,51 +302,25 @@
             cursos: parseInt(getEl('cursos').value) || 0,
             notas: getEl('notas').value
         };
-
-        let historial = JSON.parse(localStorage.getItem('historial_act')) || [];
-        const idx = historial.findIndex(i => i.mes === registro.mes);
-        
-        if (idx > -1) historial[idx] = registro;
-        else historial.push(registro);
-
-        localStorage.setItem('historial_act', JSON.stringify(historial));
-        
-        // Reset manual para iPhone
-        getEl('precursor').checked = false;
-        getEl('horas').value = 0;
-        getEl('cursos').value = 0;
-        getEl('notas').value = '';
-        handlePrecursorChange();
-        cargarDatos();
-        alert("¡Registro guardado!");
+        let hist = JSON.parse(localStorage.getItem('hist_v2')) || [];
+        const idx = hist.findIndex(i => i.mes === reg.mes);
+        if (idx > -1) hist[idx] = reg; else hist.push(reg);
+        localStorage.setItem('hist_v2', JSON.stringify(hist));
+        alert("Guardado correctamente");
+        cargar();
     });
 
     getEl('btnCompartir').addEventListener('click', () => {
-        const historial = JSON.parse(localStorage.getItem('historial_act')) || [];
-        if(historial.length === 0) return alert("No hay datos");
-        
-        const u = historial[historial.length - 1];
-        const nom = getEl('nombrePersona').value || "Publicador";
-        const txt = `*Registro de Actividad*\n*Nombre:* ${nom}\n*Mes:* ${u.mes}\n------------------\n• Participó: ${u.participo}\n• Precursor: ${u.precursor}\n• Horas: ${u.horas}\n• Cursos: ${u.cursos}\n• Notas: ${u.notas}`;
-        
-        const waUrl = `whatsapp://send?text=${encodeURIComponent(txt)}`;
-        // Intento de apertura directa para iOS
-        window.location.href = waUrl;
-        
-        // Fallback por si falla el protocolo directo
-        setTimeout(() => {
-            window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank');
-        }, 500);
+        const h = JSON.parse(localStorage.getItem('hist_v2')) || [];
+        if(!h.length) return alert("Sin datos");
+        const u = h[h.length-1];
+        const txt = `*Actividad*\n*Nombre:* ${getEl('nombrePersona').value || 'Publicador'}\n*Mes:* ${u.mes}\n• Participó: ${u.participo}\n• Precursor: ${u.precursor}\n• Horas: ${u.horas}\n• Cursos: ${u.cursos}\n• Notas: ${u.notas}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank');
     });
 
-    getEl('btnLimpiar').addEventListener('click', () => {
-        if(confirm('¿Borrar todo el historial?')) {
-            localStorage.removeItem('historial_act');
-            cargarDatos();
-        }
-    });
+    getEl('btnLimpiar').addEventListener('click', () => { if(confirm('¿Borrar todo?')) { localStorage.removeItem('hist_v2'); cargar(); } });
 
-    window.onload = cargarDatos;
+    window.onload = cargar;
 </script>
 </body>
 </html>
